@@ -100,7 +100,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    
+
 
 
     @Override
@@ -123,30 +123,39 @@ public class GameScreen implements Screen {
 
         grabWeight();
         if (newWeight != null) {
-            if (Gdx.input.isTouched()) {
-                Vector3 touchPos = new Vector3();
-                touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(touchPos);
+            handleWeightMovementAndRotation();
+        }
 
-                newWeight.setX(touchPos.x - newWeight.getSize().width / 2);
-                newWeight.setY(touchPos.y - newWeight.getSize().height / 2);
-            } else {
-                // Check if newWeight is on the zeppeliner
-                if (newWeight.getX() > zeppeliner.getX() && newWeight.getX() < (zeppeliner.getX() + zeppeliner.getTexture().getWidth())
-                        && newWeight.getY() > zeppeliner.getY() && newWeight.getY() < (zeppeliner.getY() + zeppeliner.getTexture().getHeight())) {
+    }
 
-                    // Calculate the rotation based on the weight's position relative to the zeppeliner's center
-                    float zeppelinerCenterX = (float) (zeppeliner.getX() + zeppeliner.getTexture().getWidth() / 2);
-                    float rotationFactor = newWeight.getVægt(); // Adjust this value to control the rotation amount
+    private void handleWeightMovementAndRotation() {
+        // If the screen is touched
+        if (Gdx.input.isTouched()) {
+            // Get the touch position
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
 
-                    if (newWeight.getX() < zeppelinerCenterX) {
-                        zeppeliner.rotate(rotationFactor);
-                    } else {
-                        zeppeliner.rotate(-rotationFactor);
-                    }
+            // Move the new weight
+            newWeight.setX(touchPos.x - newWeight.getSize().width / 2);
+            newWeight.setY(touchPos.y - newWeight.getSize().height / 2);
+        } else {
+            // Check if the new weight is on the zeppeliner
+            if (newWeight.getX() > zeppeliner.getX() && newWeight.getX() < (zeppeliner.getX() + zeppeliner.getTexture().getWidth())
+                    && newWeight.getY() > zeppeliner.getY() && newWeight.getY() < (zeppeliner.getY() + zeppeliner.getTexture().getHeight())) {
+
+                // Calculate the rotation based on the weight's position relative to the zeppeliner's center
+                float zeppelinerCenterX = (float) (zeppeliner.getX() + zeppeliner.getTexture().getWidth() / 2);
+                float rotationFactor = newWeight.getVægt(); // Adjust this value to control the rotation amount
+
+                if (newWeight.getX() < zeppelinerCenterX) {
+                    zeppeliner.rotate(rotationFactor);
+                } else {
+                    zeppeliner.rotate(-rotationFactor);
                 }
-                newWeight = null;
             }
+
+            // Reset the new weight to null after handling its movement and rotation
+            newWeight = null;
         }
     }
 
