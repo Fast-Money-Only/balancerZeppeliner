@@ -8,9 +8,9 @@ public class Weight extends Rectangle {
 
     private int vægt;
     private Texture texture;
-    private float x,y;
-
+    private float x, y;
     private double width, height;
+    private float offsetX, offsetY;
 
     public Weight(int vægt, Texture texture, float x, float y) {
         this.vægt = vægt;
@@ -18,6 +18,8 @@ public class Weight extends Rectangle {
         this.x = x;
         this.y = y;
         setSize(texture.getWidth(), texture.getHeight());
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class Weight extends Rectangle {
 
     @Override
     public double getX() {
-        return x;
+        return x + offsetX;
     }
 
     public void setX(float x) {
@@ -65,7 +67,7 @@ public class Weight extends Rectangle {
 
     @Override
     public double getY() {
-        return y;
+        return y + offsetY;
     }
 
     public void setY(float y) {
@@ -74,5 +76,10 @@ public class Weight extends Rectangle {
 
     public boolean overlaps(Zeppeliner zeppeliner) {
         return this.overlaps(zeppeliner);
+    }
+
+    public void setOffset(float offsetX, float offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
     }
 }

@@ -23,11 +23,14 @@ public class GameScreen implements Screen {
     Zeppeliner zeppeliner;
 
     Weight person, bomb, water, fuel, food;
+
     private Weight selectedWeight, newWeight;
 
     Background background;
 
     Texture zeppelinImg, personImg, bombImg, waterImg, fuelImg, foodImg, BGimg;
+
+    int antalMænd, antalVand, antalFuel, antalBomber, antalMad;
 
     Array<Weight> vægtObjekter;
 
@@ -50,10 +53,10 @@ public class GameScreen implements Screen {
 
 
         zeppeliner = new Zeppeliner(zeppelinImg, 450, 500 );
-        person = new Weight(70, personImg, 100, 10);
+        person = new Weight(40, personImg, 100, 10);
         bomb = new Weight(10, bombImg, 300, 10);
         water = new Weight(10, waterImg, 650, 10);
-        fuel = new Weight(30, fuelImg, 900, 10);
+        fuel = new Weight(20, fuelImg, 900, 10);
         food = new Weight(2, foodImg, 1300, 10);
 
         vægtObjekter = new Array<>();
@@ -69,10 +72,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
-    }
-
-    public void rotateShip(){
 
     }
 
@@ -101,8 +100,6 @@ public class GameScreen implements Screen {
     }
 
 
-
-
     @Override
     public void render(float v) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
@@ -114,6 +111,13 @@ public class GameScreen implements Screen {
         game.batch.begin();
 
         game.batch.draw(BGimg, 0, 0);
+        game.font.getData().setScale(2, 2);
+        game.font.draw(game.batch, "Vi skal have læsset Zeppelineren med ", 30, BGimg.getHeight() - 30);
+        game.font.draw(game.batch, antalMænd + "/5 mænd", 30, BGimg.getHeight() - 60);
+        game.font.draw(game.batch, antalBomber + "/10 bomber", 30, BGimg.getHeight() - 90);
+        game.font.draw(game.batch, antalVand + "/10 glas vand", 30, BGimg.getHeight() - 120);
+        game.font.draw(game.batch, antalFuel + "/4 sæt brændstof", 30, BGimg.getHeight() - 150);
+        game.font.draw(game.batch, antalMad + "/10 tallerkener mad", 30, BGimg.getHeight() - 180);
         zeppeliner.draw(game.batch);
         for (Weight w : vægtObjekter){
             game.batch.draw(w.getTexture(), (float) w.getX(), (float) w.getY());
@@ -139,7 +143,7 @@ public class GameScreen implements Screen {
             if (newWeight.getX() > zeppeliner.getX() && newWeight.getX() < (zeppeliner.getX() + zeppeliner.getTexture().getWidth())
                     && newWeight.getY() > zeppeliner.getY() && newWeight.getY() < (zeppeliner.getY() + zeppeliner.getTexture().getHeight())) {
 
-                float zeppelinerCenterX = (float) (zeppeliner.getX() + zeppeliner.getTexture().getWidth() / 2);
+                float zeppelinerCenterX = zeppeliner.getX() + zeppeliner.getTexture().getWidth() / 2;
                 float rotationFactor = newWeight.getVægt();
 
                 if (newWeight.getX() < zeppelinerCenterX) {
@@ -147,8 +151,24 @@ public class GameScreen implements Screen {
                 } else {
                     zeppeliner.rotate(-rotationFactor);
                 }
-            }
 
+                if (newWeight.getTexture().equals(personImg)){
+                    antalMænd++;
+                    System.out.println("antal mænd: " + antalMænd);
+                } else if (newWeight.getTexture().equals(waterImg)) {
+                    antalVand++;
+                    System.out.println("antal vand: " + antalVand);
+                } else if (newWeight.getTexture().equals(fuelImg)) {
+                    antalFuel++;
+                    System.out.println("antal fuel: " + antalFuel);
+                } else if (newWeight.getTexture().equals(foodImg)) {
+                    antalMad++;
+                    System.out.println("antal mad: " + antalMad);
+                } else if (newWeight.getTexture().equals(bombImg)) {
+                    antalBomber++;
+                    System.out.println("antal bomber: " + antalBomber);
+                }
+            }
             newWeight = null;
         }
     }
